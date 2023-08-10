@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+
+<div layout:fragment="content">
+  <form class="container" action="/articles/update" method="post">
+    <input type="hidden" name="articleId" th:value="${dto.articleId}">
+    <div class="mb-3">
+      <label class="form-label">제목</label>
+      <input type="text" class="form-control" name="title" th:field="${dto.title}">
+      <div th:errors="${dto.title}"></div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">내용</label>
+      <textarea class="form-control" rows="3" name="content" th:field="${dto.content}"></textarea>
+      <div th:errors="${dto.content}"></div>
+      <br>
+      <button type="submit" class="btn btn-primary">수정</button>
+      <button type="button" class="btn btn-primary" th:onclick="|location.href='@{/articles/{id}(id=${dto.articleId})}'|">취소</button>
+    </div>
+  </form>
+</div>
+</html>

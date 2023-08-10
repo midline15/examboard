@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+
+<div layout:fragment="content">
+  <div class="container mt-3">
+    <form th:action="@{/articles/signup}" method="post">
+      <div class="mb-3">
+        <label>ID:</label>
+        <input type="text" class="form-control" placeholder="Enter username" name="userId" th:field="${dto.userId}">
+        <div th:errors="${dto.userId}"></div>
+
+      </div>
+      <div class="mb-3">
+        <label>Password:</label>
+        <input type="password" class="form-control" placeholder="Enter password" name="userPassword" th:field="${dto.userPassword}">
+        <div th:errors="${dto.userPassword}"></div>
+      </div>
+
+      <div class="mb-3">
+        <label>Email:</label>
+        <input type="email" class="form-control" placeholder="Enter email" name="uemail" th:field="${dto.email}">
+        <div th:errors="${dto.email}"></div>
+      </div>
+
+      <div class="mb-3">
+        <label>Nickname:</label>
+        <input type="text" class="form-control" placeholder="Enter nickname" name="nickname" th:field="${dto.nickname}">
+        <div th:errors="${dto.nickname}"></div>
+      </div>
+
+      <button type="submit" class="btn btn-secondary">회원가입</button>
+    </form>
+  </div>
+
+</div>
+</html>

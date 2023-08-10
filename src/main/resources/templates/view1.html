@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+<main class="container" layout:fragment="content">
+<!--    <h1 th:text="${paginator.get('totalLastPageNum')}"></h1>-->
+    <div class="row">
+        <div class="card card-margin search-form">
+            <div class="card-body p-0">
+                <form id="search-form">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row no-gutters">
+                                <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+                                    <label for="search-type" hidden>검색 유형</label>
+                                    <select class="form-control" id="search-type" name="searchType">
+                                        <option>제목</option>
+                                        <option>본문</option>
+                                        <option>id</option>
+                                        <option>닉네임</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-8 col-md-6 col-sm-12 p-0">
+                                    <label for="search-value" hidden>검색어</label>
+                                    <input type="text" placeholder="검색어..." class="form-control" id="search-value"
+                                           name="searchValue">
+                                </div>
+                                <div class="col-lg-1 col-md-3 col-sm-12 p-0">
+                                    <button type="submit" class="btn btn-base">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                             stroke-linecap="round" stroke-linejoin="round"
+                                             class="feather feather-search">
+                                            <circle cx="11" cy="11" r="8"></circle>
+                                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <table class="table" id="article-table">
+            <thead>
+            <tr>
+                <th><a>번호</a></th>
+                <th class="title col-6"><a>제목</a></th>
+                <th class="user-id"><a>작성자</a></th>
+                <th class="created-at"><a>작성일</a></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="article : ${list}">
+                <td><a th:text="${article.articleId}"></a></td>
+                <td class="title"><a th:text="${article.title}"
+                                     th:href="@{/articles/{id} (id = ${article.articleId})}"></a></td>
+                <td class="user-id" th:text="${article.user.getUserId()}"></td>
+                <td class="created-at">
+                    <time th:text="${#temporals.format(article.createdAt, 'yyyy년MM월dd일')}"></time>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="row">
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <a th:classappend="${session.principal == null}?disabled" class="btn btn-primary me-md-2" role="button" id="write-article" href="/articles/create">글쓰기</a>
+        </div>
+    </div>
+
+    <nav aria-label="Page navigation example ">
+        <ul class="pagination">
+            <li class="page-item">
+                <a class="page-link" th:href="@{?SearchType={type}&SearchValue={value}&page=1 (type = ${dto.SearchType}, value = ${dto.SearchValue})}">
+                    <span aria-hidden="true">처음</span>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" th:href="@{?SearchType={type}&SearchValue={value}&page={page} (type = ${dto.SearchType}, value = ${dto.SearchValue}, page = ${paginator.get('blockFirstPageNum')-1})}" th:classappend="${paginator.get('blockFirstPageNum') == 1}?disabled">
+                    <span aria-hidden="true">이전</span>
+                </a>
+            </li>
+            <li class="page-item"
+                th:each="pageButton : ${paginator.get('pageList')}">
+                <a class="page-link" th:href="@{?SearchType={type}&SearchValue={value}&page={page} (type = ${dto.SearchType}, value = ${dto.SearchValue}, page = ${pageButton})}" th:text="${pageButton}" th:classappend="${paginator.get('currentPageNum') == pageButton}?active"></a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" th:href="@{?SearchType={type}&SearchValue={value}&page={page} (type = ${dto.SearchType}, value = ${dto.SearchValue}, page = ${paginator.get('blockLastPageNum')+1})}" th:classappend="${paginator.get('blockLastPageNum') == paginator.get('totalLastPageNum')}?disabled">
+                    <span aria-hidden="true">다음</span>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" th:href="@{?SearchType={type}&SearchValue={value}&page={page} (type = ${dto.SearchType}, value = ${dto.SearchValue}, page = ${paginator.get('totalLastPageNum')})}" aria-label="Previous">
+                    <span aria-hidden="true">끝</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            let msg = [[${msg}]]
+            if (msg != null) {
+                alert(msg)
+            }
+        });
+    </script>
+</main>
+</html>

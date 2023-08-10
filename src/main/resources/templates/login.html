@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+
+<div layout:fragment="content">
+    <div class="container mt-3">
+        <form th:action="@{/articles/login}" method="post">
+            <div class="mb-3">
+                <label>ID:</label>
+                <input type="text" class="form-control" placeholder="Enter username" name="userId"
+                       th:value="${dto.userId}">
+
+            </div>
+            <div class="mb-3">
+                <label>Password:</label>
+                <input type="password" class="form-control" placeholder="Enter password" name="userPassword"
+                       th:value="${dto.userPassword}">
+            </div>
+            <button type="submit" id="btn-login" class="btn btn-secondary">로그인</button>
+            <a href="/oauth2/authorization/kakao"><img height="38px" src="/image/kakao_login_medium_narrow.png"></a>
+            <a href="/oauth2/authorization/google"><img src="/image/btn_google_signin_dark_normal_web.png"
+                                                        height="38px"></a>
+            <a href="/oauth2/authorization/naver"><img src="/image/btnG_naver.png" height="38px"></a>
+        </form>
+    </div>
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            if ([[${#fields.hasErrors('dto.userId')}]]) {
+                alert([[${#fields.errors('dto.userId')}]]);
+                $("[name=userId]").focus();
+            } else if ([[${#fields.hasErrors('dto.userPassword')}]]) {
+                alert([[${#fields.errors('dto.userPassword')}]])
+                $("[name=userPassword]").focus();
+            } else {
+                $("#btn-login").on("click", () => {
+                    alert("로그인 성공");
+                });
+            }
+        });
+
+    </script>
+</div>
+</html>

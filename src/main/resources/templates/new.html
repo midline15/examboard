@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+
+<th:block layout:fragment="script">
+
+</th:block>
+
+
+<div class="container" layout:fragment="content">
+  <header id="article-form-header" class="py-5 text-center">
+    <h1>게시글 저장</h1>
+  </header>
+
+  <form action="/articles/create" method="post" id="article-form">
+    <div class="row mb-3 justify-content-md-center">
+      <label for="title" class="col-sm-2 col-lg-1 col-form-label text-sm-end">제목</label>
+      <div class="col-sm-8 col-lg-9">
+        <input type="text" class="form-control" id="title" name="title">
+      </div>
+    </div>
+    <div class="row mb-3 justify-content-md-center">
+      <label for="content" class="col-sm-2 col-lg-1 col-form-label text-sm-end">본문</label>
+      <div class="col-sm-8 col-lg-9">
+        <textarea class="form-control" id="content" name="content" rows="5"></textarea>
+      </div>
+    </div>
+    <div class="row mb-5 justify-content-md-center">
+      <div class="col-sm-10 d-grid gap-2 d-sm-flex justify-content-sm-end">
+        <button type="submit" class="btn btn-primary" id="submit-button">저장</button>
+        <button type="button" class="btn btn-secondary" id="cancel-button">취소</button>
+      </div>
+    </div>
+  </form>
+  <script th:inline="javascript">
+    $(document).ready(function(){
+
+      if([[${#fields.hasErrors()}]]){
+        var errorMessage = [[${#fields.errors('dto.title')}]] + '\n' +[[${#fields.errors('dto.content')}]]
+        alert(errorMessage);
+      }
+    })
+  </script>
+</div>
+</html>
