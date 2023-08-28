@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+
+<div layout:fragment="content">
+    <div class="container mt-3">
+        <form th:action="@{/user/signup}" method="post" th:object="${dto}">
+            <div th:fragment="formErrorsFragment" class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
+                <div th:each="err : ${#fields.allErrors()}" th:text="${err}"></div>
+            </div>
+            <div class="mb-3">
+                <label>ID:</label>
+                <input type="text" class="form-control" placeholder="Enter username" name="username">
+
+            </div>
+            <div class="mb-3">
+                <label>Password:</label>
+                <input type="password" class="form-control" placeholder="Enter password" name="password1">
+            </div>
+            <div class="mb-3">
+                <label>Password:</label>
+                <input type="password" class="form-control" placeholder="Enter password" name="password2">
+            </div>
+
+            <div class="mb-3">
+                <label>Email:</label>
+                <input type="email" class="form-control" placeholder="Enter email" name="email">
+            </div>
+
+            <div class="mb-3">
+                <label>Nickname:</label>
+                <input type="text" class="form-control" placeholder="Enter nickname" name="nickname">
+            </div>
+
+            <button type="submit" class="btn btn-secondary">회원가입</button>
+        </form>
+    </div>
+
+</div>
+</html>

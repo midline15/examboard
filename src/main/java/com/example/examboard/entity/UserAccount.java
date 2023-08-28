@@ -1,14 +1,14 @@
 package com.example.examboard.entity;
 
+import com.example.examboard.config.oauth.OAuthType;
+import com.example.examboard.entity.constant.UserRole;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -25,4 +25,10 @@ public class UserAccount extends AuditingFields{
 
     private String email;
 
+    @Setter
+    private UserRole userRole;
+
+
+    @Enumerated(EnumType.STRING)
+    private OAuthType oauth;
 }

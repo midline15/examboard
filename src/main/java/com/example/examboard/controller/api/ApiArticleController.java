@@ -1,4 +1,4 @@
-package com.example.examboard.api;
+package com.example.examboard.controller.api;
 
 import com.example.examboard.dto.ApiArticleDto;
 import com.example.examboard.dto.ApiArticleListDto;

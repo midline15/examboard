@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layouts/default_layout}">
 <main class="container" layout:fragment="content">
 
@@ -66,7 +67,7 @@
         </table>
     </div>
 
-    <div class="row">
+    <div class="row" sec:authorize="isAuthenticated()">
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
             <a class="btn btn-primary me-md-2" role="button" id="write-article" href="/articles/create">글쓰기</a>
         </div>

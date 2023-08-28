@@ -17,13 +17,13 @@
     <div class="row mb-3 justify-content-md-center">
       <label for="title" class="col-sm-2 col-lg-1 col-form-label text-sm-end">제목</label>
       <div class="col-sm-8 col-lg-9">
-        <input type="text" class="form-control" id="title" name="title">
+        <input type="text" class="form-control" id="title" name="title" th:value="${dto.title}">
       </div>
     </div>
     <div class="row mb-3 justify-content-md-center">
       <label for="content" class="col-sm-2 col-lg-1 col-form-label text-sm-end">본문</label>
       <div class="col-sm-8 col-lg-9">
-        <textarea class="form-control" id="content" name="content" rows="5"></textarea>
+        <textarea class="form-control" id="content" name="content" rows="5" th:value="${dto.content}"></textarea>
       </div>
     </div>
     <div class="row mb-5 justify-content-md-center">
@@ -34,13 +34,16 @@
     </div>
   </form>
   <script th:inline="javascript">
-    $(document).ready(function(){
-
-      if([[${#fields.hasErrors()}]]){
-        var errorMessage = [[${#fields.errors('dto.title')}]] + '\n' +[[${#fields.errors('dto.content')}]]
-        alert(errorMessage);
+    $(document).ready(function () {
+      if ([[${#fields.hasErrors('dto.title')}]]) {
+        alert([[${#fields.errors('dto.title')}]]);
+        $("[name=title]").focus();
+      } else if ([[${#fields.hasErrors('dto.content')}]]) {
+        alert([[${#fields.errors('dto.content')}]])
+        $("[name=content]").focus();
       }
-    })
+    });
+
   </script>
 </div>
 </html>

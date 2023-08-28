@@ -22,6 +22,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -30,22 +31,9 @@ import java.util.List;
 public class BoardController {
 
     private final ArticleService articleService;
-    private final EntityManager em;
+//    private final EntityManager em;
 
-    @GetMapping({"/", ""})
-    public String getArticlePage(Model model, SearchForm dto, @RequestParam(defaultValue = "1") int page) {
-
-        Paginator paginator = new Paginator(5,15, articleService.findCnt(dto));
-
-        List<Article> articleList = articleService.search(dto,(page-1)*15,15);
-
-        model.addAttribute("list",articleList);
-        model.addAttribute("paginator", paginator.getFixedBlock(page));
-        model.addAttribute("dto", dto);
-        return "view1";
-    }
-
-    @GetMapping("lists")
+    @GetMapping({"/", "", "lists"})
     public String getArticlePage(Model model,
                                  @PageableDefault(sort = "createdAt",direction = Sort.Direction.DESC) Pageable pageable,
                                  @RequestParam(defaultValue = "1") int page,
@@ -79,13 +67,12 @@ public class BoardController {
     }
 
     @PostMapping("create")
-    public String createArticle(@Valid @ModelAttribute("dto") ArticleForm dto, BindingResult bindingResult, HttpSession session) {
+    public String createArticle(@Valid @ModelAttribute("dto") ArticleForm dto, BindingResult bindingResult, Principal principal) {
         if (bindingResult.hasErrors()) {
             return "new";
         }
-        UserAccount user = (UserAccount) session.getAttribute("principal");
 
-        articleService.saveArticle(dto, user);
+        articleService.saveArticle(dto, principal.getName());
         return "redirect:/articles";
     }
 
@@ -114,8 +101,8 @@ public class BoardController {
     }
 
     @PostMapping("{id}/articleComment")
-    public String saveComment(@PathVariable Long id, ArticleCommentDto dto) {
-        articleService.addComment(id,dto);
+    public String saveComment(@PathVariable Long id, ArticleCommentDto dto, Principal principal) {
+        articleService.addComment(id,dto, principal.getName());
 
         return "redirect:/articles/"+id;
     }
@@ -128,6 +115,19 @@ public class BoardController {
         return "redirect:/articles/"+id;
     }
 
+    /*@GetMapping({"/", ""})
+    public String getArticlePage(Model model, SearchForm dto, @RequestParam(defaultValue = "1") int page) {
+
+        Paginator paginator = new Paginator(5,15, articleService.findCnt(dto));
+
+        List<Article> articleList = articleService.search(dto,(page-1)*15,15);
+
+        model.addAttribute("list",articleList);
+        model.addAttribute("paginator", paginator.getFixedBlock(page));
+        model.addAttribute("dto", dto);
+        return "view1";
+    }*/
+/*
     @GetMapping("login")
     public String login(@ModelAttribute("dto") LoginForm dto) {
         return "login";
@@ -187,5 +187,5 @@ public class BoardController {
         session.invalidate();
 
         return "redirect:/articles";
-    }
+    }*/
 }

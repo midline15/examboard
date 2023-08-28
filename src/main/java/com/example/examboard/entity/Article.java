@@ -40,6 +40,9 @@ public class Article extends AuditingFields{
                 .articleId(articleId)
                 .title(title)
                 .content(content)
+                .user(user)
+                .commentList(commentList)
+                .createdAt(createdAt)
                 .build();
     }
 

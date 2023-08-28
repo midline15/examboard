@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <!-- Header Fragment 선언부 -->
 <div th:fragment="header">
     <header class="p-3 bg-dark text-white">
@@ -10,20 +11,50 @@
                 </ul>
                 <div class="text-end">
                     <span class="text-white me-2"></span>
-                    <a th:unless="${session.principal}" class="btn btn-outline-light me-2" href="/articles/login">Login</a>
-                    <a th:unless="${session.principal}" class="btn btn-outline-light me-2" href="/articles/signup">Signup</a>
-                    <a th:if="${session.principal}" class="btn btn-outline-light me-2" href="javascript:confirmLogout();">Logout</a>
+                    <div sec:authorize="isAnonymous()">
+                        <a class="btn btn-outline-light me-2" href="/user/login">Login</a>
+                        <a class="btn btn-outline-light me-2" href="/user/signup">Signup</a>
+                    </div>
+                    <div sec:authorize="isAuthenticated()">
+                        <a th:if="${#strings.equals(#authentication.principal.user.oauth,'WOORI')}"
+                           class="btn btn-outline-light me-2" href="javascript:wooriLogout();">Logout</a>
+                        <a th:if="${#strings.equals(#authentication.principal.user.oauth,'NAVER')}"
+                           class="btn btn-outline-light me-2" href="javascript:naverLogout();">Logout</a>
+                        <a th:if="${#strings.equals(#authentication.principal.user.oauth,'GOOGLE')}"
+                           class="btn btn-outline-light me-2" href="javascript:googleLogout();">Logout</a>
+                        <a th:if="${#strings.equals(#authentication.principal.user.oauth,'KAKAO')}"
+                           class="btn btn-outline-light me-2" href="javascript:kakaoLogout();">Logout</a>
+                    </div>
                 </div>
             </div>
         </div>
     </header>
     <br>
     <script>
-        function confirmLogout() {
-            if( confirm("정말 로그아웃 하시겠습니까?") ) {
-                location.href = "/articles/login";
+        function wooriLogout() {
+            if (confirm("정말 로그아웃 하시겠습니까?")) {
+                location.href = "/logout";
+            }
+        }
+        function googleLogout() {
+            if (confirm("정말 로그아웃 하시겠습니까?")) {
+                let win = window.open('https://accounts.google.com/logout',"popup", "width=400, height=300, menubar=1")
+                location.href = "/logout";
+            }
+        }
+        function naverLogout() {
+            if (confirm("정말 로그아웃 하시겠습니까?")) {
+                window.open('http://nid.naver.com/nidlogin.logout',"popup", "width=400, height=300, menubar=1")
+                location.href = "/logout";
+            }
+        }
+        function kakaoLogout() {
+            if (confirm("정말 로그아웃 하시겠습니까?")) {
+                location.href = "/logout/kakao";
             }
         }
     </script>
 </div>
 </html>
+
+<!--<a th:if="${#strings.contains(#authentication.name, 'kakao')}" class="btn btn-outline-light me-2" th:href="@{https://kauth.kakao.com/oauth/logout?(client_id=${@environment.getProperty('spring.security.oauth2.client.registration.kakao.client-id')} , logout_redirect_uri=${@environment.getProperty('logout_redirect_uri')})}">카카오 로그아웃</a>-->

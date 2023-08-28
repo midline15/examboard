@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -118,13 +119,13 @@ public class ArticleService {
     }
 
     @Transactional
-    public ArticleComment addComment(Long id, ArticleCommentDto dto) {
+    public ArticleComment addComment(Long id, ArticleCommentDto dto, String userId) {
         Article article = articleRepository.findById(id).get();
 
         ArticleComment comment = ArticleComment.builder()
                 .article(article)
                 .content(dto.getContent())
-                .user(article.getUser())
+                .user(em.find(UserAccount.class, userId))
                 .build();
 
         article.getCommentList().add(comment);
@@ -155,7 +156,8 @@ public class ArticleService {
     }
 
     @Transactional
-    public void saveArticle(ArticleForm dto, UserAccount user) {
+    public void saveArticle(ArticleForm dto, String username) {
+        UserAccount user = em.find(UserAccount.class, username);
         Article article = Article.builder()
                 .title(dto.getTitle())
                 .content(dto.getContent())

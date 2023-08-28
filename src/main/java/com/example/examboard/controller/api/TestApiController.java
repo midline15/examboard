@@ -1,4 +1,4 @@
-package com.example.examboard.api;
+package com.example.examboard.controller.api;
 
 import com.example.examboard.dto.TestForm;
 import com.example.examboard.entity.TestEntity;
